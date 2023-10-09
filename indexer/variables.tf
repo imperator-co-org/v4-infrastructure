@@ -398,6 +398,7 @@ variable "datadog_api_url" {
   default     = "https://api.datadoghq.com/"
 }
 
+<<<<<<< HEAD
 variable "indexer_level_geoblocking" {
   type        = bool
   description = "Whether indexer level geoblocking is enabled, disable if geoblocking is done at DNS/CDN level"
