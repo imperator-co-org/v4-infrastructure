@@ -7,7 +7,7 @@ variable "environment" {
 
   validation {
     condition = contains(
-      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "research", "testnet1", "testnet2", "mainnet"],
+      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "research", "testnet1", "testnet2", "testnet9", "mainnet"],
       var.environment
     )
     error_message = "Err: invalid environment. Must be one of {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | research | testnet1 | testnet2 | mainnet}."
