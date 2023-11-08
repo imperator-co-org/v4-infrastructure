@@ -42,7 +42,7 @@ variable "environment" {
 
   validation {
     condition = contains(
-      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "testnet1", "testnet2", "mainnet"],
+      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "testnet1", "testnet2", "testnet9", "mainnet"],
       var.environment
     )
     error_message = "Err: invalid environment. Must be one of {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | testnet1 | testnet2 | mainnet}."
@@ -332,6 +332,12 @@ variable "monitoring_team" {
   default     = "v4-indexer"
 }
 
+variable "enable_precautionary_monitors" {
+  type        = bool
+  description = "Whether to enable precautionary monitors"
+  default     = true
+}
+
 variable "indexer_url" {
   type        = string
   description = "indexer URL to monitor, should not include https:// or www. Should be something like `indexer.dydx.exchange`"
@@ -425,5 +431,17 @@ variable "vulcan_ecs_environment_variables" {
     value = string
   }))
   description = "Environment variables to set for the Indexer Vulcan ECS task, in addition to the default values."
+  default     = []
+}
+
+variable "public_access" {
+  type        = bool
+  description = "Enables public access of the indexer endpoints."
+  default     = true
+}
+
+variable "services_disable_dd_log" {
+  type        = list(string)
+  description = "List of services will disable the log forwarder subscription to datadog. "
   default     = []
 }

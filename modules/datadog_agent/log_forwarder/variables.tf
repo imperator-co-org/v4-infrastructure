@@ -4,7 +4,7 @@ variable "environment" {
 
   validation {
     condition = contains(
-      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "testnet1", "testnet2", "mainnet"],
+      ["dev", "dev2", "dev3", "dev4", "dev5", "staging", "testnet", "public-testnet", "testnet1", "testnet2", "testnet9", "mainnet"],
       var.environment
     )
     error_message = "Err: invalid environment. Must be one of {dev | dev2 | dev3 | dev4 | dev5 | staging | testnet | public-testnet | testnet1 | testnet2 | mainnet}."
@@ -39,3 +39,8 @@ variable "dd_site" {
   description = "The site that the datadog agent will send data to"
 }
 
+variable "disable_subscription" {
+  type        = bool
+  description = "Disable datadog log forwarder or not. Default: false"
+  default     = false
+}
