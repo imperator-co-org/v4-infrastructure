@@ -21,7 +21,8 @@ resource "aws_ecs_service" "main" {
     # We ignore changes to the `task-definition` of the ECS service as the specific deployed Task Definition
     # is part of our service deploy process. Applying Terraform should not trigger a new deploy of services.
     ignore_changes = [
-      task_definition
+      task_definition,
+      desired_count
     ]
   }
 
