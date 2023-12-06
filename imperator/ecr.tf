@@ -15,7 +15,7 @@ resource "aws_ecr_repository" "snapshot" {
 resource "aws_ecr_lifecycle_policy" "snapshot" {
   count      = var.environment == "mainnet" ? 0 : 1
   provider   = aws.us-east-2
-  repository = aws_ecr_repository.snapshot[index.count].name
+  repository = aws_ecr_repository.snapshot[count.index].name
 
   policy = jsonencode({
     rules = [{
@@ -82,7 +82,7 @@ resource "aws_ecr_repository" "snapshot_ap_northeast" {
 resource "aws_ecr_lifecycle_policy" "snapshot_ap_northeast" {
   count      = var.environment == "mainnet" ? 1 : 0
   provider   = aws.ap-northeast-1
-  repository = aws_ecr_repository.snapshot[index.count].name
+  repository = aws_ecr_repository.snapshot[count.index].name
 
   policy = jsonencode({
     rules = [{
