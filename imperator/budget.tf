@@ -9,7 +9,7 @@ resource "aws_budgets_budget" "total" {
     comparison_operator        = "GREATER_THAN"
     threshold                  = 100
     threshold_type             = "PERCENTAGE"
-    notification_type          = "FORECASTED"
+    notification_type          = "ACTUAL"
     subscriber_email_addresses = var.budget_subscriber_email
   }
 }
