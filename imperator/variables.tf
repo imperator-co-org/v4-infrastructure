@@ -30,3 +30,10 @@ variable "devbox_public_key" {
   type        = string
   default     = ""
 }
+variable "budget_total_amount_per_month" {
+  description = "The amount of cost for whole infrastructure of indexer"
+  default     = 25000
+}
+variable "budget_subscriber_email" {
+  description = "List of emails to receive notification"
+}
