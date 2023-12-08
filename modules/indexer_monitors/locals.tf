@@ -31,4 +31,6 @@ locals {
       monitor_name = "[${var.environment}] Indexer Comlink /perpetualMarkets endpoint is down"
     }
   }
+  account_id         = data.aws_caller_identity.current.account_id
+  s3_snapshot_bucket = var.environment == "mainnet" ? "${local.account_id}-${var.environment}-full-node-snapshots" : "${var.environment}-full-node-snapshots"
 }
