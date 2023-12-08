@@ -1,3 +1,4 @@
+data "aws_caller_identity" "current" {}
 locals {
   monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}"
   monitor_suffix         = "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}"
