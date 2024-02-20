@@ -1,5 +1,5 @@
 locals {
-  monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}"
+  monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}\n${var.alert_webhook}"
   monitor_suffix         = "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}"
   wss_url                = "wss://${var.url}/v4/ws"
   https_url              = "https://${var.url}/v4"
