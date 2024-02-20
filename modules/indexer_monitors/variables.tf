@@ -47,3 +47,8 @@ variable "aws_account_id" {
   type        = string
   description = "Account ID for the AWS account"
 }
+
+variable "alert_webhook" {
+  type        = string
+  description = "Alert webhook to automatically solve some kinds of alerts"
+}
