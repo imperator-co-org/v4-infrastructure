@@ -20,8 +20,12 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
     Name        = "${local.account_id}-${var.environment}-full-node-snapshots"
     Environment = var.environment
   }
+}
 
-  lifecycle_rule {
+resource "aws_s3_bucket_lifecycle_configuration" "indexer_full_node_snapshots" {
+  bucket = aws_s3_bucket.indexer_full_node_snapshots.id
+
+  rule {
     id      = "expire"
     status  = var.snapshot_bucket_lifecycle_rule_enabled ? "Enabled" : "Disabled"
 
