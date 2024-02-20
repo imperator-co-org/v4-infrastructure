@@ -22,6 +22,19 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "indexer_full_node_snapshots" {
+  bucket = aws_s3_bucket.indexer_full_node_snapshots.id
+
+  rule {
+    id      = "expire"
+    status  = var.snapshot_bucket_lifecycle_rule_enabled ? "Enabled" : "Disabled"
+
+    expiration {
+      days = var.snapshot_bucket_expiration_days
+    }
+  }
+}
+
 # Enable S3 bucket metrics to be sent to Datadog for monitoring
 resource "aws_s3_bucket_metric" "indexer_full_node_snapshots" {
   bucket = aws_s3_bucket.indexer_full_node_snapshots.id
@@ -64,3 +77,4 @@ resource "aws_s3_bucket" "athena_rds_snapshots" {
     Environment = var.environment
   }
 }
+
