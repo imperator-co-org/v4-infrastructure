@@ -45,11 +45,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "indexer_full_node_snapshots" {
     status = "Enabled"
 
     expiration {
-      days = var.s3_snapshot_expiration_days
+      days = var.snapshot_bucket_expiration_days
     }
   }
 }
-
 
 # Enable S3 bucket metrics to be sent to Datadog for monitoring
 resource "aws_s3_bucket_metric" "indexer_full_node_snapshots" {
