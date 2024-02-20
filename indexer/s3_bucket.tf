@@ -20,6 +20,15 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
     Name        = "${local.account_id}-${var.environment}-full-node-snapshots"
     Environment = var.environment
   }
+
+  lifecycle_rule {
+    id      = "expire"
+    status  = var.snapshot_bucket_lifecycle_rule_enabled ? "Enabled" : "Disabled"
+
+    expiration {
+      days = 7
+    }
+  }
 }
 
 # Enable S3 bucket metrics to be sent to Datadog for monitoring
@@ -64,3 +73,4 @@ resource "aws_s3_bucket" "athena_rds_snapshots" {
     Environment = var.environment
   }
 }
+

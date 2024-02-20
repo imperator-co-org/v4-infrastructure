@@ -147,6 +147,12 @@ variable "snapshot_full_node_name" {
   description = "Name of the indexer full-node that periodically restarts and uploads snapshots to S3"
 }
 
+variable "snapshot_bucket_lifecycle_rule_enabled" {
+  type        = bool
+  description = "Enable lifecycle for snapshot bucket. Suggested number is 7 days"
+  default     = true
+}
+
 variable "full_node_availability_zones" {
   type        = list(string)
   description = "Availability zones for the full-node to run in"
