@@ -153,6 +153,12 @@ variable "snapshot_bucket_lifecycle_rule_enabled" {
   default     = true
 }
 
+variable "snapshot_bucket_expiration_days" {
+  type = number
+  description = "Expiration days for snapshot bucket. Default: 7 days"
+  default = 7
+}
+
 variable "full_node_availability_zones" {
   type        = list(string)
   description = "Availability zones for the full-node to run in"

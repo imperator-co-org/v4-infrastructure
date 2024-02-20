@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "indexer_full_node_snapshots" {
     status  = var.snapshot_bucket_lifecycle_rule_enabled ? "Enabled" : "Disabled"
 
     expiration {
-      days = 7
+      days = var.snapshot_bucket_expiration_days
     }
   }
 }
