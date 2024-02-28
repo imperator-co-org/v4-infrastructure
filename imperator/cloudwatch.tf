@@ -22,5 +22,6 @@ resource "aws_cloudwatch_metric_alarm" "fullnode_snapshot_storage_alarm" {
   dimensions = {
     InstanceId = "${var.fullnode_snapshot_instance_id}"
     path = "/"
+    fstype = "xfs"
   }
 }
