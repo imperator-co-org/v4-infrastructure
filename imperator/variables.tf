@@ -30,3 +30,6 @@ variable "devbox_public_key" {
   type        = string
   default     = ""
 }
+variable "fullnode_snapshot_instance_id" {
+  description = "Fullnode snapshot instance id"
+}
