@@ -33,3 +33,6 @@ variable "devbox_public_key" {
 variable "fullnode_snapshot_instance_id" {
   description = "Fullnode snapshot instance id"
 }
+variable "pagerduty_endpoint" {
+    description = "Pagerduty endpoint for alert notification"
+}

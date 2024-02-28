@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "fullnode_snapshot_storage_alarm" {
   statistic           = "Average"
   threshold           = "95"
   alarm_description   = "This metric checks if fullnode_snapshot storage is above 95%"
-  alarm_actions       = [aws_sns_topic.fullnode_snapshot_storage_alert.arn]
+  alarm_actions       = [aws_sns_topic.pagerduty_topic.arn]
   dimensions = {
     InstanceId = "${var.fullnode_snapshot_instance_id}"
     path = "/"
