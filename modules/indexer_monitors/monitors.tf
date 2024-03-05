@@ -43,19 +43,24 @@ resource "datadog_monitor_json" "orderbook_crossed" {
 	"name": "[${var.environment}] Indexer Orderbook crossed for {{clob_pair_id.name}}",
 	"type": "query alert",
 	"query": "max(last_10m):default_zero(avg:roundtable.crossed_orderbook.best_ask_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id} - avg:roundtable.crossed_orderbook.best_bid_human{env:${var.environment},!clob_pair_id:33} by {clob_pair_id}) < 0",
-	"message": "Orderbook has been crossed for more than 10 minutes for {{clob_pair_id.name}} . This may be an instance of a stale orderbook level that was not removed.\n\nImpact:\nThe stale orderbook level will affect the FE and API, leading users to have inaccurate assumptions of what price orders will fill at.\n\nResolution:\nClear the stale orderbook levels from redis.\n\n${local.monitor_suffix_literal}",
+    "message": "Orderbook has been crossed for more than 10 minutes for {{clob_pair_id.name}} . This may be an instance of a stale orderbook level that was not removed.\n\nImpact:\nThe stale orderbook level will affect the FE and API, leading users to have inaccurate assumptions of what price orders will fill at.\n\nResolution:\nClear the stale orderbook levels from redis.\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n${var.alert_webhook}",
 	"tags": [
 		"team:${var.team}",
 		"env:${var.env_tag}"
 	],
 	"options": {
+        "escalation_message": "Orderbook has been crossed for more than 10 minutes for {{clob_pair_id.name}} . This may be an instance of a stale orderbook level that was not removed.\n\nImpact:\nThe stale orderbook level will affect the FE and API, leading users to have inaccurate assumptions of what price orders will fill at.\n\nResolution:\nClear the stale orderbook levels from redis.\n\n{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_renotify}}\n${var.pagerduty_tag}\n{{/is_renotify}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}\n${var.alert_webhook}",
 		"thresholds": {
 			"critical": 0
 		},
 		"notify_audit": false,
 		"require_full_window": false,
 		"notify_no_data": false,
-		"renotify_interval": 0,
+		"renotify_interval": 10,
+        "renotify_statuses": [
+            "alert",
+            "no data"
+        ],
 		"include_tags": true,
 		"new_group_delay": 60,
 		"silenced": {
