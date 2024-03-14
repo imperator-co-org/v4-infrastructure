@@ -474,13 +474,21 @@ variable "alert_webhook" {
   type        = string
   description = "Alert webhook to automatically solve some kinds of alerts"
 }
+
 variable "create_read_replica_2" {
   description = "Create read replia 2 or not. Default: true"
   type        = bool
   default     = true
 }
+
 variable "rds_main_multi_az_enable" {
   description = "Enable RDS main instance. Default: true"
   type        = bool
   default     = true
+}
+
+variable "private_hosted_zone" {
+  description = "Private hosted zone for indexer resources"
+  type        = string
+  default     = "dydx-indexer.private"
 }
