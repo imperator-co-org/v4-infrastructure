@@ -93,5 +93,5 @@ resource "aws_route" "indexer_route_to_backup_full_node" {
 
   route_table_id            = each.value.id
   destination_cidr_block    = var.backup_full_node_cidr_vpc
-  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer[count.index].id
+  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer[0].id
 }
