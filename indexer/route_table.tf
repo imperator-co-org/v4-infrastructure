@@ -89,8 +89,7 @@ resource "aws_route" "indexer_route_to_full_node" {
 }
 
 resource "aws_route" "indexer_route_to_backup_full_node" {
-  count    = var.create_backup_full_node ? 1 : 0
-  for_each = aws_route_table.private
+  for_each = var.create_backup_full_node ? aws_route_table.private : {}
 
   route_table_id            = each.value.id
   destination_cidr_block    = var.backup_full_node_cidr_vpc
