@@ -71,7 +71,7 @@ resource "aws_route" "backup_full_node_route_to_indexer" {
   count 		    = var.create_backup_full_node ? 1 : 0
   route_table_id            = module.backup_full_node_ap_northeast_1[count.index].route_table_id
   destination_cidr_block    = var.indexers[var.region].vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer[count.index].id
 }
 
 # Route from the Indexer's private subnets to the full node's VPC. Needed so that the full node can
@@ -89,9 +89,10 @@ resource "aws_route" "indexer_route_to_full_node" {
 }
 
 resource "aws_route" "indexer_route_to_backup_full_node" {
+  count    = var.create_backup_full_node ? 1 : 0
   for_each = aws_route_table.private
 
   route_table_id            = each.value.id
   destination_cidr_block    = var.backup_full_node_cidr_vpc
-  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer[count.index].id
 }
