@@ -68,7 +68,8 @@ resource "aws_route" "full_node_route_to_indexer" {
 # NOTE: This is not an individual AWS resource, but rather an attachment to the route table, and so
 # no tags are added.
 resource "aws_route" "backup_full_node_route_to_indexer" {
-  route_table_id            = module.backup_full_node_ap_northeast_1.route_table_id
+  count 		    = var.backup_full_node_enabled ? 1 : 0
+  route_table_id            = module.backup_full_node_ap_northeast_1[index.count].route_table_id
   destination_cidr_block    = var.indexers[var.region].vpc_cidr_block
   vpc_peering_connection_id = aws_vpc_peering_connection.backup_full_node_peer.id
 }
