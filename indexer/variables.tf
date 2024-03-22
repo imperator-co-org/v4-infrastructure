@@ -639,8 +639,8 @@ variable "private_hosted_zone" {
   default     = "dydx-indexer.private"
 }
 
-variable "enable_backup_full_node" {
-  description = "Enable backup full node. Default: true on mainnet"
+variable "create_backup_full_node" {
+  description = "Create backup full node. Default: true on mainnet"
   type        = bool
   default     = true
 }
