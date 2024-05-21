@@ -147,8 +147,8 @@ locals {
     },
     "${local.service_names["roundtable"]}" : {
       ecs_desired_count : 5,
-      task_definition_memory : 2048,
-      task_definition_cpu : 1024,
+      task_definition_memory : 4096,
+      task_definition_cpu : 2048,
       is_public_facing : false,
       ports : [8080],
       health_check_port : 8080,
