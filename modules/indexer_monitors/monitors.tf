@@ -390,7 +390,7 @@ resource "datadog_monitor_json" "ec2_status_check_failed" {
   ],
   "options": {
       "thresholds": {
-          "critical": 1
+          "critical": 0
       },
       "notify_audit": false,
       "include_tags": false,
