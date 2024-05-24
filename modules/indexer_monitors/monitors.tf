@@ -382,7 +382,7 @@ resource "datadog_monitor_json" "ec2_status_check_failed" {
 	"id": 2704589,
 	"name": "[${var.environment}] EC2 Status failed",
 	"type": "query alert",
-  "query": "avg:aws.ec2.status_check_failed{env:*${var.environment}} by {name}",
+  "query": "avg:aws.ec2.status_check_failed{env:*${var.environment}} by {name} > 0",
   "message": "EC2 validator name {{name.name}}. Please check the instance to investigate further.\n\n${local.monitor_suffix_literal}",
   "tags": [
       "team:${var.team}",
