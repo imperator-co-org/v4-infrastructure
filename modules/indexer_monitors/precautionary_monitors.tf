@@ -74,7 +74,7 @@ resource "datadog_monitor_json" "rds_read_replica_lag" {
 	],
 	"options": {
 		"thresholds": {
-			"critical": 1
+			"critical": 2
 		},
 		"notify_audit": false,
 		"require_full_window": false,
