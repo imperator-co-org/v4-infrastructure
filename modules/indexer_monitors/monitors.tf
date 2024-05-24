@@ -375,3 +375,29 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
 }
 EOF
 }
+
+resource "datadog_monitor_json" "ec2_status_check_failed" {
+  monitor = <<EOF
+{
+	"name": "[${var.environment}] EC2 Status failed",
+	"type": "query alert",
+  "query": "avg:aws.ec2.status_check_failed{env:*${var.environment}} by {name}"
+  "message": "EC2 validator name {{name.name}}. Please check the instance to investigate further.\n\n${local.monitor_suffix_literal}",
+  "tags": [
+      "team:${var.team}",
+      "env:${var.env_tag}"
+  ],
+  "options": {
+      "thresholds": {
+          "critical": 1
+      },
+      "notify_audit": false,
+      "include_tags": false,
+      "notify_no_data": false,
+      "silenced": {}
+  },
+  "priority": null,
+  "restricted_roles": null
+}
+EOF
+}
