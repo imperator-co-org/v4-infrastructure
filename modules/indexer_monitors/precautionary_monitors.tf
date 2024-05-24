@@ -106,7 +106,7 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
     ],
     "options": {
         "thresholds": {
-            "critical": 500
+            "critical": 10000
         },
         "notify_audit": false,
         "include_tags": false,
