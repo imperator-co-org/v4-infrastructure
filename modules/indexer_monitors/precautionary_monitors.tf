@@ -98,7 +98,7 @@ resource "datadog_monitor_json" "websocket_stream_destroyed" {
     "id": 2836481,
     "name": "[${var.environment}] Underlying socket was destroyed, leading to lost websocket messages.",
     "type": "query alert",
-    "query": "sum(last_5m):avg:socks.ws_send.stream_destroyed_errors{env:${var.environment}}.as_count() > 500",
+    "query": "sum(last_5m):avg:socks.ws_send.stream_destroyed_errors{env:${var.environment}}.as_count() > 10000",
     "message": "Underlying socket was destroyed, leading to lost messages. Check if there are any CPU/memory spikes on any specific tasks. This should auto-recover.\n\n${local.monitor_suffix_literal}",
     "tags": [
         "team:${var.team}",
