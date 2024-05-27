@@ -170,3 +170,31 @@ resource "aws_ecs_task_definition" "main" {
     Environment = var.environment
   }
 }
+
+resource "aws_appautoscaling_target" "ecs_target_socks" {
+  count              = var.socks_enable_autoscaling ? 1 : 0
+  max_capacity       = 100
+  min_capacity       = 25
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main["socks"].name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "ecs_policy_socks" {
+  count              = var.socks_enable_autoscaling ? 1 : 0
+  name               = "cpu-tracking"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_target_socks[count.index].resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target_socks[count.index].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target_socks[count.index].service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+
+    target_value       = 50.0
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 300
+  }
+}
