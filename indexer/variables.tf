@@ -649,3 +649,9 @@ variable "create_backup_full_node" {
   type        = bool
   default     = true
 }
+
+variable "socks_enable_autoscaling" {
+  description = "Enable autoscaling for socks service. Default: false"
+  type        = bool
+  default     = false
+}
