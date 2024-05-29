@@ -165,9 +165,9 @@ variable "snapshot_bucket_lifecycle_rule_enabled" {
 }
 
 variable "snapshot_bucket_expiration_days" {
-  type = number
+  type        = number
   description = "Expiration days for snapshot bucket. Default: 7 days"
-  default = 7
+  default     = 7
 }
 
 variable "full_node_availability_zones" {
@@ -519,4 +519,9 @@ variable "services_disable_dd_log" {
   type        = list(string)
   description = "List of services will disable the log forwarder subscription to datadog. "
   default     = []
+}
+
+variable "alert_webhook" {
+  type        = string
+  description = "Alert webhook to automatically solve some kinds of alerts"
 }
