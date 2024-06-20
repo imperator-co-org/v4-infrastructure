@@ -472,3 +472,9 @@ variable "image_count" {
   description = "Number of images to store for ECR, defaults to 100."
   default     = 100
 }
+
+variable "services_disable_dd_log" {
+  type        = list(string)
+  description = "List of services will disable the log forwarder subscription to datadog. "
+  default     = []
+}
