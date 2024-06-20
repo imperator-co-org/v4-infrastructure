@@ -502,3 +502,9 @@ variable "full_node_root_block_device_size" {
   description = "Size of Size of root block device in gigabytes."
   default     = 4000
 }
+
+variable "services_disable_dd_log" {
+  type        = list(string)
+  description = "List of services will disable the log forwarder subscription to datadog. "
+  default     = []
+}
