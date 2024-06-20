@@ -602,3 +602,9 @@ variable "socks_ecs_desired_count" {
   description = "Number of desired socks instances."
   default     = 5
 }
+
+variable "services_disable_dd_log" {
+  type        = list(string)
+  description = "List of services will disable the log forwarder subscription to datadog. "
+  default     = []
+}
