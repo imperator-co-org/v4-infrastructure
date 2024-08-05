@@ -196,8 +196,8 @@ locals {
     },
     "${local.service_names["vulcan"]}" : {
       ecs_desired_count : 5,
-      task_definition_memory : 4096,
-      task_definition_cpu : 2048,
+      task_definition_memory : 8192,
+      task_definition_cpu : 4096,
       is_public_facing : false,
       ports : [8080],
       health_check_port : 8080,
