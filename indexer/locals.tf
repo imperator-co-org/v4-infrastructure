@@ -204,7 +204,7 @@ locals {
     },
     "${local.service_names["vulcan"]}" : {
       ecs_desired_count : var.vulcan_ecs_desired_count,
-      task_definition_memory : 8192,
+      task_definition_memory : 16384,
       task_definition_cpu : 4096,
       is_public_facing : false,
       ports : [8080],
