@@ -265,7 +265,6 @@ resource "datadog_monitor_json" "off_chain_kafka_offset" {
 	"name": "[${var.environment}] Indexer High Kafka offset lag for off-chain messages",
 	"type": "query alert",
 	"query": "min(last_1h):avg:aws.kafka.max_offset_lag{topic:to-vulcan AND cluster_name IN (${var.msk_cluster_name}) AND consumer_group:vulcan} by {cluster_name} > 100",
-	# "message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nResolution:\n- increase the number of `vulcan` tasks running in ECS\n\n${local.monitor_suffix_literal}",
 	"message": "Max. offset lag for the `to-vulcan` Kafka topic is > 100 meaning order OPEN / CANCEL and order book updates are delayed.\n\nFollow the steps in this [runbook entry](https://www.notion.so/dydx/Publicly-Shared-Indexer-Oncall-Runbook-3d7ca52b11254bb2a3677bcd69a65d46?pvs=4#ad4748d9abb3460384ba3f25817b7208).\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
