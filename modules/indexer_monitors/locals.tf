@@ -1,5 +1,5 @@
 locals {
-  monitor_suffix_literal          = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}\\n\\n"
+  monitor_suffix_literal          = "{{#is_alert}}\\n${var.pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag}\\n{{/is_recovery}}\\n{{#is_no_data}}\\n${var.pagerduty_tag}\\n{{/is_no_data}}\\n${var.slack_channel}\\n\\n"
   monitor_suffix                  = "{{#is_alert}}\n${var.pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}\n\n"
   critical_monitor_suffix_literal = "{{#is_alert}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_alert}}\\n\\n{{#is_recovery}}\\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\\n{{/is_recovery}}\\n\\n${var.slack_channel}\\n\\n"
   critical_monitor_suffix         = "{{#is_alert}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_alert}}\n\n{{#is_recovery}}\n${var.pagerduty_tag} ${var.secondary_pagerduty_tag}\n{{/is_recovery}}\n\n${var.slack_channel}\n\n"
