@@ -24,11 +24,12 @@ resource "aws_msk_cluster" "main" {
   cluster_name           = "${var.environment}-${var.indexers[var.region].name}-msk-cluster"
   kafka_version          = local.kafka_version
   number_of_broker_nodes = 3
+  enhanced_monitoring    = "PER_TOPIC_PER_PARTITION"
   broker_node_group_info {
     instance_type = var.msk_instance_type
     storage_info {
       ebs_storage_info {
-        volume_size = var.environment == "mainnet" ? 2000 : 1000 # in GB
+        volume_size = var.environment == "mainnet" ? 4000 : 1000 # in GB
       }
     }
     client_subnets = [

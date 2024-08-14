@@ -35,7 +35,7 @@ resource "datadog_monitor_json" "p95_block_processing_rate" {
 	"id": 117804982,
 	"name": "[${var.environment}] p95 Indexer block processing is slow",
 	"type": "query alert",
-	"query": "avg(last_5m):avg:ender.processed_block.timing.95percentile{env:${var.environment}, service:indexer, success:true} / avg:dydxprotocol.blocktime_block_time_ms{env:${var.environment}} > 0.75",
+	"query": "avg(last_10m):avg:ender.processed_block.timing.95percentile{env:${var.environment}, service:indexer, success:true} / avg:dydxprotocol.blocktime_block_time_ms{env:${var.environment}} > 0.9",
 	"message": "This is not an actionable alert. When this alert fires, that means that the Indexer is processing blocks slow and more time should be invested in improving Ender latency. Please notify Trading if this alert fires.\n\n${local.monitor_suffix_literal}",
 	"tags": [
 		"team:${var.team}",
@@ -43,7 +43,7 @@ resource "datadog_monitor_json" "p95_block_processing_rate" {
 	],
 	"options": {
 		"thresholds": {
-			"critical": 0.75
+			"critical": 0.9
 		},
 		"notify_audit": false,
 		"require_full_window": false,
