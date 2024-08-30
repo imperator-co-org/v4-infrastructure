@@ -261,6 +261,15 @@ variable "full_node_public_ports" {
   description = "List of ports to expose to the public for the full node"
 }
 
+variable "full_node_public_whitelisted_ports" {
+  type = list(object({
+    port        = number
+    cidr_blocks = list(string)
+  }))
+  default     = []
+  description = "List of ports to expose to the public for the full node with cidr"
+}
+
 variable "full_node_use_cosmovisor" {
   type        = bool
   description = "Whether the full-node will be run using `cosmovisor`"
