@@ -68,6 +68,15 @@ variable "public_ports" {
   description = "List of ports that should be exposed to the public internet."
 }
 
+variable "public_whitelisted_ports" {
+  type = list(object({
+    port        = number
+    cidr_blocks = list(string)
+  }))
+  description = "List of ports that should be exposed to the public internet with cidr"
+  default     = []
+}
+
 # -----------------------------------------------------------------------------
 # ECS
 # -----------------------------------------------------------------------------
