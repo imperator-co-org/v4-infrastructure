@@ -17,6 +17,19 @@ resource "aws_security_group" "main" {
     }
   }
 
+  # For incoming traffic with IP whitelisted
+  dynamic "ingress" {
+    for_each = var.public_whitelisted_ports
+    iterator = tcp_port
+
+    content {
+      protocol    = "tcp"
+      from_port   = tcp_port.value.port
+      to_port     = tcp_port.value.port
+      cidr_blocks = tcp_port.value.cidr_blocks
+    }
+  }
+
   # Allow port 22 for "ec2-instance-connect".
   # This allows us to SSH into the validators from the AWS Deveoper console.
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html
