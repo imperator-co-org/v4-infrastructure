@@ -216,6 +216,7 @@ resource "aws_db_instance" "main" {
   performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
   multi_az                              = var.rds_main_multi_az_enable
+  monitoring_interval                   = 60
 
   tags = {
     Name        = local.aws_db_instance_main_name
@@ -241,6 +242,7 @@ resource "aws_db_instance" "read_replica" {
   multi_az                              = false
 
   replicate_source_db = aws_db_instance.main.identifier
+  monitoring_interval = 60
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica"
@@ -267,6 +269,7 @@ resource "aws_db_instance" "read_replica_2" {
   multi_az                              = false
 
   replicate_source_db = aws_db_instance.main.identifier
+  monitoring_interval = 60
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
