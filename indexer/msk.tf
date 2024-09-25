@@ -56,5 +56,8 @@ resource "aws_msk_cluster" "main" {
     arn      = aws_msk_configuration.main.arn
     revision = aws_msk_configuration.main.latest_revision
   }
+  lifecycle {
+    ignore_changes = [broker_node_group_info[0].ebs_storage_info]
+  }
 }
 
