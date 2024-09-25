@@ -192,6 +192,29 @@ data "aws_secretsmanager_secret_version" "ender_secrets" {
   secret_id = "${var.environment}-ender-secrets"
 }
 
+resource "aws_iam_role" "rds_enhanced_monitoring_role" {
+  name = "rds-enhanced-monitoring-role" # Replace with your desired role name
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "monitoring.rds.amazonaws.com"
+        },
+        "Action" : "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+# Attach the AmazonRDSEnhancedMonitoringRole policy to the role
+resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_attachment" {
+  role       = aws_iam_role.rds_enhanced_monitoring_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+}
+
 # RDS instance.
 resource "aws_db_instance" "main" {
   identifier        = local.aws_db_instance_main_name
@@ -217,6 +240,7 @@ resource "aws_db_instance" "main" {
   auto_minor_version_upgrade            = false
   multi_az                              = var.enable_rds_main_multiaz
   monitoring_interval                   = 60
+  monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role
 
   tags = {
     Name        = local.aws_db_instance_main_name
