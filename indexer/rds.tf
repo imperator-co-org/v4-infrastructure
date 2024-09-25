@@ -240,7 +240,7 @@ resource "aws_db_instance" "main" {
   auto_minor_version_upgrade            = false
   multi_az                              = var.rds_main_multi_az_enable
   monitoring_interval                   = 60
-  monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role
+  monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role.arn
 
   tags = {
     Name        = local.aws_db_instance_main_name
