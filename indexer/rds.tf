@@ -268,6 +268,7 @@ resource "aws_db_instance" "read_replica" {
 
   replicate_source_db = aws_db_instance.main.identifier
   monitoring_interval = 60
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica"
@@ -296,6 +297,7 @@ resource "aws_db_instance" "read_replica_2" {
 
   replicate_source_db = aws_db_instance.main.identifier
   monitoring_interval = 60
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
