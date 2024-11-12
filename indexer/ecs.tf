@@ -150,10 +150,10 @@ resource "aws_ecs_task_definition" "main" {
               name  = "SECRET_ID",
               value = local.service_secret_ids[each.key],
             },
-            each.value.ecs_environment_variables,
             each.value.requires_postgres_connection ? local.postgres_environment_variables : [],
             each.value.requires_kafka_connection ? local.kafka_environment_variables : [],
             each.value.requires_redis_connection ? local.redis_environment_variables : [],
+            each.value.ecs_environment_variables,
           ]
         ),
       },

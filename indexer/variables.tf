@@ -240,6 +240,11 @@ variable "full_node_ec2_instance_type" {
   description = "EC2 instance type for the full node instance"
 }
 
+variable "full_node_snapshot_ec2_instance_type" {
+  type        = string
+  description = "EC2 instance type for the full node snapshot instance"
+}
+
 variable "full_node_tendermint_log_level" {
   type        = string
   description = "Tendermint log-level of the Indexer full-node"
