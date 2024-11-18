@@ -12,6 +12,7 @@ module "backup_full_node_ap_northeast_1" {
   cidr_public_subnets         = var.backup_full_node_cidr_public_subnets
   tcp_port_to_health_protocol = var.full_node_tcp_port_to_health_protocol
   public_ports                = var.full_node_public_ports
+  public_whitelisted_ports    = var.full_node_public_whitelisted_ports
 
   ecs_task_memory = var.full_node_ecs_task_memory
 
