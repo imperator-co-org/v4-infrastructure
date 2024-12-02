@@ -30,6 +30,11 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
+resource "aws_iam_role_policy_attachment" "ecs_instance_cw_policy_attachment" {
+  role       = aws_iam_role.ecs_instance_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
 resource "aws_iam_instance_profile" "validator_instance_profile" {
   name = "${var.environment}-${var.name}-ValidatorInstanceProfile"
   role = aws_iam_role.ecs_instance_iam_role.name
