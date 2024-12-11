@@ -224,13 +224,14 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_attachment" {
 
 # RDS instance.
 resource "aws_db_instance" "main" {
-  identifier        = local.aws_db_instance_main_name
-  instance_class    = var.rds_db_instance_class
-  allocated_storage = var.rds_db_allocated_storage_gb
-  engine            = local.db_engine
-  engine_version    = local.db_engine_version
-  db_name           = local.rds_db_name
-  username          = local.rds_username
+  identifier            = local.aws_db_instance_main_name
+  instance_class        = var.rds_db_instance_class
+  allocated_storage     = var.rds_db_allocated_storage_gb
+  max_allocated_storage = var.rds_db_max_allocated_storage_gb
+  engine                = local.db_engine
+  engine_version        = local.db_engine_version
+  db_name               = local.rds_db_name
+  username              = local.rds_username
   # DB password is a sensitive variable passed in via the Terraform Workspace.
   password               = jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"]
   db_subnet_group_name   = aws_db_subnet_group.main.name
@@ -264,6 +265,7 @@ resource "aws_db_instance" "read_replica" {
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
   allocated_storage      = var.rds_db_allocated_storage_gb
+  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
@@ -293,6 +295,7 @@ resource "aws_db_instance" "read_replica_2" {
   vpc_security_group_ids = [aws_security_group.rds.id]
   parameter_group_name   = aws_db_parameter_group.main.name
   allocated_storage      = var.rds_db_allocated_storage_gb
+  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
   publicly_accessible    = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
