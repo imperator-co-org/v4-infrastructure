@@ -122,6 +122,12 @@ variable "rds_db_allocated_storage_gb" {
   default     = 1000
 }
 
+variable "rds_db_max_allocated_storage_gb" {
+  type        = number
+  description = "Max storage allocated to the Postgres RDS DB in GB"
+  default     = 1500
+}
+
 variable "elasticache_redis_num_cache_clusters" {
   type        = number
   description = "Number of elasticache cache clusters"
