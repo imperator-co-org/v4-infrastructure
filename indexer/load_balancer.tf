@@ -156,3 +156,20 @@ resource "aws_lb_target_group" "services" {
     Environment = var.environment
   }
 }
+
+resource "aws_lb_listener_rule" "public_https_numia" {
+  count        = var.enable_https ? 1 : 0
+  listener_arn = aws_lb_listener.public_https[0].arn
+  priority     = 30
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.services["numia"].arn
+  }
+
+  condition {
+    host_header {
+      values = ["indexer-numia.dydx.trade"]
+    }
+  }
+}
