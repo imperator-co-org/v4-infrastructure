@@ -512,6 +512,15 @@ variable "vulcan_ecs_environment_variables" {
   default     = []
 }
 
+variable "numia_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Numia ECS task, in addition to the default values."
+  default     = []
+}
+
 variable "public_access" {
   type        = bool
   description = "Enables public access of the indexer endpoints."
