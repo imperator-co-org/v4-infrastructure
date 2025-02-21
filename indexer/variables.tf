@@ -656,6 +656,12 @@ variable "socks_ecs_desired_count" {
   default     = 5
 }
 
+variable "numia_ecs_desired_count" {
+  type        = number
+  description = "Number of desired numia instances."
+  default     = 1
+}
+
 variable "services_disable_dd_log" {
   type        = list(string)
   description = "List of services will disable the log forwarder subscription to datadog. "
