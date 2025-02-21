@@ -324,7 +324,7 @@ resource "aws_db_instance" "read_replica_9" {
   apply_immediately                     = false
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
-  performance_insights_retention_period = 91
+  performance_insights_retention_period = 31
   auto_minor_version_upgrade            = false
   multi_az                              = false
 
