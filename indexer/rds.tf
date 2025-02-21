@@ -121,7 +121,7 @@ resource "aws_db_parameter_group" "main" {
   # More details: https://postgresqlco.nf/doc/en/param/log_min_duration_statement/
   parameter {
     name  = "log_min_duration_statement"
-    value = "30000" # Default is -1 (disabled). Set to 30s.
+    value = "3000" # Default is -1 (disabled). Set to 30s.
   }
 
   # Matches v3.
