@@ -307,3 +307,33 @@ resource "aws_db_instance" "read_replica_2" {
     Environment = "${var.environment}"
   }
 }
+
+# Read replica 9 for Numia
+resource "aws_db_instance" "read_replica_9" {
+  count          = var.create_read_replica_9 ? 1 : 0
+  identifier     = "${local.aws_db_instance_main_name}-read-replica-9"
+  instance_class = var.numia_rds_db_instance_class
+  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
+  # be specified for a replica, and will match the properties on the source db.
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  parameter_group_name   = aws_db_parameter_group.main.name
+  allocated_storage      = var.rds_db_allocated_storage_gb
+  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
+  publicly_accessible    = false
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately                     = false
+  skip_final_snapshot                   = true
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 91
+  auto_minor_version_upgrade            = false
+  multi_az                              = false
+
+  replicate_source_db = aws_db_instance.main.identifier
+  monitoring_interval = 60
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+
+  tags = {
+    Name        = "${local.aws_db_instance_main_name}-read-replica-9"
+    Environment = "${var.environment}"
+  }
+}

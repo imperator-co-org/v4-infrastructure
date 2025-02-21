@@ -116,6 +116,12 @@ variable "rds_db_instance_class" {
   description = "Instance class for the Postgres RDS DB"
 }
 
+variable "numia_rds_db_instance_class" {
+  type        = string
+  description = "Instance class for the Postgres RDS DB"
+}
+
+
 variable "rds_db_allocated_storage_gb" {
   type        = number
   description = "Storage allocated to the Postgres RDS DB in GB"
@@ -573,6 +579,12 @@ variable "create_read_replica_2" {
   description = "Create read replia 2 or not. Default: true"
   type        = bool
   default     = true
+}
+
+variable "create_read_replica_9" {
+  description = "Create read replia 9 or not. Default: true"
+  type        = bool
+  default     = false
 }
 
 variable "enable_rds_main_multiaz" {
