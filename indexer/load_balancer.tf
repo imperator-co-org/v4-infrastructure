@@ -148,7 +148,7 @@ resource "aws_lb_target_group" "services" {
 
   health_check {
     port = each.value.health_check_port
-    path = "/health"
+    path = each.key == "numia" ? "/" : "/health" 
   }
 
   tags = {
