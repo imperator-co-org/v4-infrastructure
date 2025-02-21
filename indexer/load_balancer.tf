@@ -169,7 +169,23 @@ resource "aws_lb_listener_rule" "public_https_numia" {
 
   condition {
     host_header {
-      values = ["indexer-numia.dydx.trade"]
+      values = ["indexer-numia.dydx.trade", "indexer-numia.imperator.co"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "public_http_numia" {
+  listener_arn = aws_lb_listener.public_http.arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.services["numia"].arn
+  }
+
+  condition {
+    host_header {
+      values = ["indexer-numia.dydx.trade", "indexer-numia.imperator.co"]
     }
   }
 }
