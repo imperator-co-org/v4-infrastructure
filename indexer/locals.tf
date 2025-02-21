@@ -249,7 +249,6 @@ locals {
             name : "AWS_REGION",
             value : var.region,
           },
-         },
           var.numia_ecs_environment_variables,
         ],
       ),
