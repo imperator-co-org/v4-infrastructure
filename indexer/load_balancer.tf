@@ -169,7 +169,7 @@ resource "aws_lb_listener_rule" "public_https_numia" {
 
   condition {
     host_header {
-      values = ["indexer-numia.dydx.trade", "indexer-numia.imperator.co"]
+      values = ["indexer-numia.dydx.trade", "indexer-ro-1.dydxopsservices.com"]
     }
   }
 }
@@ -185,7 +185,7 @@ resource "aws_lb_listener_rule" "public_http_numia" {
 
   condition {
     host_header {
-      values = ["indexer-numia.dydx.trade", "indexer-numia.imperator.co"]
+      values = ["indexer-numia.dydx.trade", "indexer-ro-1.dydxopsservices.com"]
     }
   }
 }
