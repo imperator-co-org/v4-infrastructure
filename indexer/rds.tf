@@ -250,7 +250,7 @@ resource "aws_db_instance" "main" {
   monitoring_interval                   = 60
   monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role.arn
   deletion_protection                   = true
-  enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
+  enabled_cloudwatch_logs_exports       = ["postgresql", "upgrade"]
   tags = {
     Name        = local.aws_db_instance_main_name
     Environment = "${var.environment}"
@@ -310,7 +310,7 @@ resource "aws_db_instance" "read_replica_2" {
   monitoring_interval             = 60
   monitoring_role_arn             = aws_iam_role.rds_enhanced_monitoring_role.arn
   deletion_protection             = true
-  enabled_cloudwatch_logs_exports = ["iam-db-auth-error", "postgresql", "upgrade"]
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
