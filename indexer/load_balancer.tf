@@ -155,7 +155,7 @@ resource "aws_lb_target_group" "services" {
 }
 
 resource "aws_lb_listener_rule" "public_https_numia" {
-  count        = var.enable_https ? 1 : 0
+  count        = 1
   listener_arn = aws_lb_listener.public_https[0].arn
   priority     = 10
 
