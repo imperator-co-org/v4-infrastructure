@@ -116,6 +116,12 @@ variable "rds_db_instance_class" {
   description = "Instance class for the Postgres RDS DB"
 }
 
+variable "rds_db_read_replica_2_instance_class" {
+  type        = string
+  description = "Instance class for the Postgres RDS DB replica 2"
+  default     = "db.r7i.4xlarge"
+}
+
 variable "numia_rds_db_instance_class" {
   type        = string
   description = "Instance class for the Postgres RDS DB"

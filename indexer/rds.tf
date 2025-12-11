@@ -290,14 +290,15 @@ resource "aws_db_instance" "main" {
 resource "aws_db_instance" "read_replica_2" {
   count          = var.create_read_replica_2 ? 1 : 0
   identifier     = "${local.aws_db_instance_main_name}-read-replica-2"
-  instance_class = var.rds_db_instance_class
+  instance_class = var.rds_db_read_replica_2_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
-  publicly_accessible    = false
+  # parameter_group_name   = aws_db_parameter_group.main.name # old code
+  parameter_group_name  = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  allocated_storage     = var.rds_db_allocated_storage_gb
+  max_allocated_storage = var.rds_db_max_allocated_storage_gb
+  publicly_accessible   = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
