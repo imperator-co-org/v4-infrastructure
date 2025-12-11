@@ -356,7 +356,7 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
 	"id": 2704587,
 	"name": "[${var.environment}] Comlink Elevated Internal Server Errors",
 	"type": "query alert",
-	"query": "sum(last_5m):avg:comlink.response_status_code.500{*}.as_count() / avg:comlink.response_status_code.200{*}.as_count() > 0.01",
+	"query": "sum(last_5m):avg:comlink.response_status_code.500{*}.as_count() / avg:comlink.response_status_code.200{*}.as_count() > 0.1",
   "message": "Elevated Internal Server Errors from Comlink. Check Comlink logs/RDS for any issues.\n\n${local.monitor_suffix_literal}",
   "tags": [
       "team:${var.team}",
@@ -364,7 +364,34 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
   ],
   "options": {
       "thresholds": {
-          "critical": 0.01
+          "critical": 0.1
+      },
+      "notify_audit": false,
+      "include_tags": false,
+      "notify_no_data": false,
+      "silenced": {}
+  },
+  "priority": null,
+  "restricted_roles": null
+}
+EOF
+}
+
+resource "datadog_monitor_json" "ec2_status_check_failed" {
+  monitor = <<EOF
+{
+	"id": 2704589,
+	"name": "[${var.environment}] EC2 Status failed",
+	"type": "query alert",
+  "query": "avg(last_5m):aws.ec2.status_check_failed{env:*${var.environment}} by {name} > 0",
+  "message": "EC2 validator name {{name.name}}. Please check the instance to investigate further.\n\n${local.monitor_suffix_literal}",
+  "tags": [
+      "team:${var.team}",
+      "env:${var.env_tag}"
+  ],
+  "options": {
+      "thresholds": {
+          "critical": 0
       },
       "notify_audit": false,
       "include_tags": false,
