@@ -23,7 +23,7 @@ resource "aws_route53_record" "read_replica_2" {
   zone_id = aws_route53_zone.main.zone_id
   name    = "postgres-main-rr.${var.private_hosted_zone}"
   type    = "CNAME"
-  ttl     = "30"
+  ttl     = "60"
   records = ["${aws_db_instance.read_replica_2[count.index].address}"]
   weighted_routing_policy {
     weight = 1
