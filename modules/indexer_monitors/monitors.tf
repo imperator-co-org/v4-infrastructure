@@ -356,7 +356,7 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
 	"id": 2704587,
 	"name": "[${var.environment}] Comlink Elevated Internal Server Errors",
 	"type": "query alert",
-	"query": "sum(last_5m):avg:comlink.response_status_code.500{*}.as_count() / avg:comlink.response_status_code.200{*}.as_count() > 0.01",
+	"query": "sum(last_5m):avg:comlink.response_status_code.500{*}.as_count() / avg:comlink.response_status_code.200{*}.as_count() > 0.1",
   "message": "Elevated Internal Server Errors from Comlink. Check Comlink logs/RDS for any issues.\n\n${local.monitor_suffix_literal}",
   "tags": [
       "team:${var.team}",
@@ -364,7 +364,7 @@ resource "datadog_monitor_json" "elevated_internal_server_errors" {
   ],
   "options": {
       "thresholds": {
-          "critical": 0.01
+          "critical": 0.1
       },
       "notify_audit": false,
       "include_tags": false,

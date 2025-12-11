@@ -3,7 +3,7 @@ resource "aws_cloudwatch_log_group" "services" {
   for_each = local.services
 
   name              = "/ecs/${var.environment}-${var.indexers[var.region].name}-${each.key}"
-  retention_in_days = 30
+  retention_in_days = each.key == "socks" ? 7 : 30
 
   tags = {
     Name        = "/ecs/${var.environment}-${var.indexers[var.region].name}-${each.key}"

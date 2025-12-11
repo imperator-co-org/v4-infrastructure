@@ -145,11 +145,44 @@ resource "aws_lb_target_group" "services" {
 
   health_check {
     port = each.value.health_check_port
-    path = "/health"
+    path = each.key == "numia" ? "/" : "/health" 
   }
 
   tags = {
     Name        = "${var.environment}-${var.indexers[var.region].name}-${each.key}-tg"
     Environment = var.environment
+  }
+}
+
+resource "aws_lb_listener_rule" "public_https_numia" {
+  count        = 1
+  listener_arn = aws_lb_listener.public_https[0].arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.services["numia"].arn
+  }
+
+  condition {
+    host_header {
+      values = ["indexer-numia.dydx.trade", "indexer-ro-1.dydxopsservices.com"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "public_http_numia" {
+  listener_arn = aws_lb_listener.public_http.arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.services["numia"].arn
+  }
+
+  condition {
+    host_header {
+      values = ["indexer-numia.dydx.trade", "indexer-ro-1.dydxopsservices.com"]
+    }
   }
 }

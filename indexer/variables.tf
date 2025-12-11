@@ -116,6 +116,18 @@ variable "rds_db_instance_class" {
   description = "Instance class for the Postgres RDS DB"
 }
 
+variable "rds_db_read_replica_2_instance_class" {
+  type        = string
+  description = "Instance class for the Postgres RDS DB replica 2"
+  default     = "db.r7i.4xlarge"
+}
+
+variable "numia_rds_db_instance_class" {
+  type        = string
+  description = "Instance class for the Postgres RDS DB"
+}
+
+
 variable "rds_db_allocated_storage_gb" {
   type        = number
   description = "Storage allocated to the Postgres RDS DB in GB"
@@ -507,6 +519,15 @@ variable "vulcan_ecs_environment_variables" {
   default     = []
 }
 
+variable "numia_ecs_environment_variables" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "Environment variables to set for the Indexer Numia ECS task, in addition to the default values."
+  default     = []
+}
+
 variable "public_access" {
   type        = bool
   description = "Enables public access of the indexer endpoints."
@@ -559,6 +580,12 @@ variable "create_read_replica_2" {
   description = "Create read replia 2 or not. Default: true"
   type        = bool
   default     = true
+}
+
+variable "create_read_replica_9" {
+  description = "Create read replia 9 or not. Default: true"
+  type        = bool
+  default     = false
 }
 
 variable "enable_rds_main_multiaz" {
@@ -628,6 +655,12 @@ variable "socks_ecs_desired_count" {
   type        = number
   description = "Number of desired socks instances."
   default     = 5
+}
+
+variable "numia_ecs_desired_count" {
+  type        = number
+  description = "Number of desired numia instances."
+  default     = 1
 }
 
 variable "services_disable_dd_log" {

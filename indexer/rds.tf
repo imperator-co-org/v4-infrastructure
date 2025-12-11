@@ -121,7 +121,7 @@ resource "aws_db_parameter_group" "main" {
   # More details: https://postgresqlco.nf/doc/en/param/log_min_duration_statement/
   parameter {
     name  = "log_min_duration_statement"
-    value = "30000" # Default is -1 (disabled). Set to 30s.
+    value = "3000" # Default is -1 (disabled). Set to 30s.
   }
 
   # Matches v3.
@@ -236,20 +236,22 @@ resource "aws_db_instance" "main" {
   password               = jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"]
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  publicly_accessible    = false
+  # parameter_group_name   = aws_db_parameter_group.main.name
+  parameter_group_name = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  publicly_accessible  = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
   backup_retention_period               = 7
   delete_automated_backups              = false
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  performance_insights_retention_period = 465
   auto_minor_version_upgrade            = false
   multi_az                              = var.enable_rds_main_multiaz
   monitoring_interval                   = 60
   monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role.arn
-
+  deletion_protection                   = true
+  enabled_cloudwatch_logs_exports       = ["postgresql", "upgrade"]
   tags = {
     Name        = local.aws_db_instance_main_name
     Environment = "${var.environment}"
@@ -257,60 +259,95 @@ resource "aws_db_instance" "main" {
 }
 
 # Read replica
-resource "aws_db_instance" "read_replica" {
-  identifier     = "${local.aws_db_instance_main_name}-read-replica"
-  instance_class = var.rds_db_instance_class
-  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
-  # be specified for a replica, and will match the properties on the source db.
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 31
-  auto_minor_version_upgrade            = false
-  multi_az                              = false
-
-  replicate_source_db = aws_db_instance.main.identifier
-  monitoring_interval = 60
-  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
-
-  tags = {
-    Name        = "${local.aws_db_instance_main_name}-read-replica"
-    Environment = "${var.environment}"
-  }
-}
+# resource "aws_db_instance" "read_replica" {
+#   identifier     = "${local.aws_db_instance_main_name}-read-replica"
+#   instance_class = var.rds_db_instance_class
+#   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
+#   # be specified for a replica, and will match the properties on the source db.
+#   vpc_security_group_ids = [aws_security_group.rds.id]
+#   parameter_group_name   = aws_db_parameter_group.main.name
+#   allocated_storage      = var.rds_db_allocated_storage_gb
+#   max_allocated_storage  = var.rds_db_max_allocated_storage_gb
+#   publicly_accessible    = false
+#   # Set to true if any planned changes need to be applied before the next maintenance window.
+#   apply_immediately                     = false
+#   skip_final_snapshot                   = true
+#   performance_insights_enabled          = true
+#   performance_insights_retention_period = 31
+#   auto_minor_version_upgrade            = false
+#   multi_az                              = false
+#
+#   replicate_source_db = aws_db_instance.main.identifier
+#   monitoring_interval = 60
+#   monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+#
+#   tags = {
+#     Name        = "${local.aws_db_instance_main_name}-read-replica"
+#     Environment = "${var.environment}"
+#   }
+# }
 
 # Read replica 2
 resource "aws_db_instance" "read_replica_2" {
   count          = var.create_read_replica_2 ? 1 : 0
   identifier     = "${local.aws_db_instance_main_name}-read-replica-2"
-  instance_class = var.rds_db_instance_class
+  instance_class = var.rds_db_read_replica_2_instance_class
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
-  publicly_accessible    = false
+  # parameter_group_name   = aws_db_parameter_group.main.name # old code
+  parameter_group_name  = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  allocated_storage     = var.rds_db_allocated_storage_gb
+  max_allocated_storage = var.rds_db_max_allocated_storage_gb
+  publicly_accessible   = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  performance_insights_retention_period = 465
   auto_minor_version_upgrade            = false
   multi_az                              = false
 
-  replicate_source_db = aws_db_instance.main.identifier
-  monitoring_interval = 60
-  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+  replicate_source_db             = aws_db_instance.main.identifier
+  monitoring_interval             = 60
+  monitoring_role_arn             = aws_iam_role.rds_enhanced_monitoring_role.arn
+  deletion_protection             = true
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
+    Environment = "${var.environment}"
+  }
+}
+
+# Read replica 9 for Numia
+resource "aws_db_instance" "read_replica_9" {
+  count          = var.create_read_replica_9 ? 1 : 0
+  identifier     = "${local.aws_db_instance_main_name}-read-replica-9"
+  instance_class = var.numia_rds_db_instance_class
+  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
+  # be specified for a replica, and will match the properties on the source db.
+  vpc_security_group_ids = [aws_security_group.rds.id]
+  # parameter_group_name   = aws_db_parameter_group.main.name
+  parameter_group_name  = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  allocated_storage     = var.rds_db_allocated_storage_gb
+  max_allocated_storage = var.rds_db_max_allocated_storage_gb
+  publicly_accessible   = false
+  # Set to true if any planned changes need to be applied before the next maintenance window.
+  apply_immediately                     = false
+  skip_final_snapshot                   = true
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 465
+  auto_minor_version_upgrade            = false
+  multi_az                              = false
+
+  replicate_source_db             = aws_db_instance.main.identifier
+  monitoring_interval             = 60
+  monitoring_role_arn             = aws_iam_role.rds_enhanced_monitoring_role.arn
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
+
+  tags = {
+    Name        = "${local.aws_db_instance_main_name}-read-replica-9"
     Environment = "${var.environment}"
   }
 }

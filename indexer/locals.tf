@@ -12,6 +12,7 @@ locals {
     "socks",
     "roundtable",
     "vulcan",
+    "numia"
   ]
   // Needed so that there are no circular dependencies for all resources are created per service names.
   service_names = {
@@ -231,6 +232,27 @@ locals {
         ],
       ),
     },
+    "${local.service_names["numia"]}" : {
+      ecs_desired_count : var.numia_ecs_desired_count,
+      task_definition_memory : 4096,
+      task_definition_cpu : 2048,
+      is_public_facing : true,
+      ports : [8080, 80],
+      health_check_port : 80,
+      requires_kafka_connection : false,
+      requires_postgres_connection : false,
+      requires_redis_connection : false,
+      should_deploy_in_rds_subnet : false,
+      ecs_environment_variables : flatten(
+        [
+          {
+            name : "AWS_REGION",
+            value : var.region,
+          },
+          var.numia_ecs_environment_variables,
+        ],
+      ),
+    },
   }
   postgres_environment_variables = [
     {
@@ -245,10 +267,10 @@ locals {
       name  = "DB_HOSTNAME",
       value = aws_db_instance.main.address,
     },
-    {
-      name  = "DB_READONLY_HOSTNAME",
-      value = aws_route53_record.read_replica_1.name,
-    },
+    # {
+    #   name  = "DB_READONLY_HOSTNAME",
+    #   value = aws_route53_record.read_replica_1.name,
+    # },
     {
       name  = "DB_PORT",
       value = local.rds_port,
