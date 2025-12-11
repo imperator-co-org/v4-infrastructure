@@ -244,12 +244,13 @@ resource "aws_db_instance" "main" {
   backup_retention_period               = 7
   delete_automated_backups              = false
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  performance_insights_retention_period = 465
   auto_minor_version_upgrade            = false
   multi_az                              = var.enable_rds_main_multiaz
   monitoring_interval                   = 60
   monitoring_role_arn                   = aws_iam_role.rds_enhanced_monitoring_role.arn
-
+  deletion_protection                   = true
+  enabled_cloudwatch_logs_exports       = ["iam-db-auth-error", "postgresql", "upgrade"]
   tags = {
     Name        = local.aws_db_instance_main_name
     Environment = "${var.environment}"
@@ -257,33 +258,33 @@ resource "aws_db_instance" "main" {
 }
 
 # Read replica
-resource "aws_db_instance" "read_replica" {
-  identifier     = "${local.aws_db_instance_main_name}-read-replica"
-  instance_class = var.rds_db_instance_class
-  # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
-  # be specified for a replica, and will match the properties on the source db.
-  vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
-  publicly_accessible    = false
-  # Set to true if any planned changes need to be applied before the next maintenance window.
-  apply_immediately                     = false
-  skip_final_snapshot                   = true
-  performance_insights_enabled          = true
-  performance_insights_retention_period = 31
-  auto_minor_version_upgrade            = false
-  multi_az                              = false
-
-  replicate_source_db = aws_db_instance.main.identifier
-  monitoring_interval = 60
-  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
-
-  tags = {
-    Name        = "${local.aws_db_instance_main_name}-read-replica"
-    Environment = "${var.environment}"
-  }
-}
+# resource "aws_db_instance" "read_replica" {
+#   identifier     = "${local.aws_db_instance_main_name}-read-replica"
+#   instance_class = var.rds_db_instance_class
+#   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
+#   # be specified for a replica, and will match the properties on the source db.
+#   vpc_security_group_ids = [aws_security_group.rds.id]
+#   parameter_group_name   = aws_db_parameter_group.main.name
+#   allocated_storage      = var.rds_db_allocated_storage_gb
+#   max_allocated_storage  = var.rds_db_max_allocated_storage_gb
+#   publicly_accessible    = false
+#   # Set to true if any planned changes need to be applied before the next maintenance window.
+#   apply_immediately                     = false
+#   skip_final_snapshot                   = true
+#   performance_insights_enabled          = true
+#   performance_insights_retention_period = 31
+#   auto_minor_version_upgrade            = false
+#   multi_az                              = false
+#
+#   replicate_source_db = aws_db_instance.main.identifier
+#   monitoring_interval = 60
+#   monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+#
+#   tags = {
+#     Name        = "${local.aws_db_instance_main_name}-read-replica"
+#     Environment = "${var.environment}"
+#   }
+# }
 
 # Read replica 2
 resource "aws_db_instance" "read_replica_2" {
@@ -301,13 +302,15 @@ resource "aws_db_instance" "read_replica_2" {
   apply_immediately                     = false
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  performance_insights_retention_period = 465
   auto_minor_version_upgrade            = false
   multi_az                              = false
 
-  replicate_source_db = aws_db_instance.main.identifier
-  monitoring_interval = 60
-  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+  replicate_source_db             = aws_db_instance.main.identifier
+  monitoring_interval             = 60
+  monitoring_role_arn             = aws_iam_role.rds_enhanced_monitoring_role.arn
+  deletion_protection             = true
+  enabled_cloudwatch_logs_exports = ["iam-db-auth-error", "postgresql", "upgrade"]
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-2"
@@ -331,7 +334,7 @@ resource "aws_db_instance" "read_replica_9" {
   apply_immediately                     = false
   skip_final_snapshot                   = true
   performance_insights_enabled          = true
-  performance_insights_retention_period = 31
+  performance_insights_retention_period = 465
   auto_minor_version_upgrade            = false
   multi_az                              = false
 
