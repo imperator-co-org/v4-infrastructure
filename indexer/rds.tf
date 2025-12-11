@@ -236,8 +236,9 @@ resource "aws_db_instance" "main" {
   password               = jsondecode(data.aws_secretsmanager_secret_version.ender_secrets.secret_string)["DB_PASSWORD"]
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  publicly_accessible    = false
+  # parameter_group_name   = aws_db_parameter_group.main.name
+  parameter_group_name = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  publicly_accessible  = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
@@ -327,10 +328,11 @@ resource "aws_db_instance" "read_replica_9" {
   # engine, engine_version, name, username, db_subnet_group_name, allocated_storage do not have to
   # be specified for a replica, and will match the properties on the source db.
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.main.name
-  allocated_storage      = var.rds_db_allocated_storage_gb
-  max_allocated_storage  = var.rds_db_max_allocated_storage_gb
-  publicly_accessible    = false
+  # parameter_group_name   = aws_db_parameter_group.main.name
+  parameter_group_name  = "mainnet-indexer-apne1-db-postgres-16-hot-standby-feedback" # Manually hardcoded, change if needed
+  allocated_storage     = var.rds_db_allocated_storage_gb
+  max_allocated_storage = var.rds_db_max_allocated_storage_gb
+  publicly_accessible   = false
   # Set to true if any planned changes need to be applied before the next maintenance window.
   apply_immediately                     = false
   skip_final_snapshot                   = true
@@ -339,9 +341,10 @@ resource "aws_db_instance" "read_replica_9" {
   auto_minor_version_upgrade            = false
   multi_az                              = false
 
-  replicate_source_db = aws_db_instance.main.identifier
-  monitoring_interval = 60
-  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring_role.arn
+  replicate_source_db             = aws_db_instance.main.identifier
+  monitoring_interval             = 60
+  monitoring_role_arn             = aws_iam_role.rds_enhanced_monitoring_role.arn
+  enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   tags = {
     Name        = "${local.aws_db_instance_main_name}-read-replica-9"
