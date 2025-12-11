@@ -237,7 +237,7 @@ locals {
       task_definition_memory : 4096,
       task_definition_cpu : 2048,
       is_public_facing : true,
-      ports : [8080,80],
+      ports : [8080, 80],
       health_check_port : 80,
       requires_kafka_connection : false,
       requires_postgres_connection : false,
@@ -267,10 +267,10 @@ locals {
       name  = "DB_HOSTNAME",
       value = aws_db_instance.main.address,
     },
-    {
-      name  = "DB_READONLY_HOSTNAME",
-      value = aws_route53_record.read_replica_1.name,
-    },
+    # {
+    #   name  = "DB_READONLY_HOSTNAME",
+    #   value = aws_route53_record.read_replica_1.name,
+    # },
     {
       name  = "DB_PORT",
       value = local.rds_port,
